@@ -55,73 +55,30 @@ public class FileChooserController {
 
     }
 
-
-    public void onNameClik() {
+    public void onNameClik() throws ParserConfigurationException, IOException, SAXException {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 
 
         try {
 
-            // optional, but recommended
-            // process XML securely, avoid attacks like XML External Entities (XXE)
+
             dbf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
 
-            // parse XML file
+
             DocumentBuilder db = dbf.newDocumentBuilder();
 
             Document doc = db.parse(new File(absolutePath));
 
-            // optional, but recommended
-            // http://stackoverflow.com/questions/13786607/normalization-in-dom-parsing-with-java-how-does-it-work
+
             doc.getDocumentElement().normalize();
 
             System.out.println("Root Element :" + doc.getDocumentElement().getNodeName());
+            System.out.println(doc.getDocumentElement().getTextContent());
+            textArea.setText(doc.getDocumentElement().getTextContent());
             System.out.println("------");
 
-            // get <staff>
-            NodeList list = doc.getElementsByTagName("staff");
 
-            for (int temp = 0; temp < list.getLength(); temp++) {
-
-                Node node = list.item(temp);
-
-                if (node.getNodeType() == Node.ELEMENT_NODE) {
-
-                    Element element = (Element) node;
-
-                    // get staff's attribute
-                    String id = element.getAttribute("id");
-
-                    // get text
-                    String firstname = element.getElementsByTagName("firstname").item(0).getTextContent();
-                    String lastname = element.getElementsByTagName("lastname").item(0).getTextContent();
-                    String nickname = element.getElementsByTagName("nickname").item(0).getTextContent();
-                    String salary = element.getElementsByTagName("salary").item(0).getTextContent();
-
-                    NodeList salaryNodeList = element.getElementsByTagName("salary");
-
-
-                    // get salary's attribute
-                    String currency = salaryNodeList.item(0).getAttributes().getNamedItem("currency").getTextContent();
-
-                    textArea.setText("Current Element :" + node.getNodeName() + "\n" +
-                            "Staff Id : " + id + "\n" +
-                            "First Name : " + firstname + "\n" +
-                            "Last Name : " + lastname + "\n" +
-                            "Nick Name : " + nickname + "\n" +
-                            "Salary [Currency] : " + salary);
-
-                    System.out.println("Current Element :" + node.getNodeName());
-                    System.out.println("Staff Id : " + id);
-                    System.out.println("First Name : " + firstname);
-                    System.out.println("Last Name : " + lastname);
-                    System.out.println("Nick Name : " + nickname);
-                    System.out.printf("Salary [Currency] : " + salary);
-                }
-            }
-
-
-        } catch (ParserConfigurationException | SAXException | IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
