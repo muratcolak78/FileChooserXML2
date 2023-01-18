@@ -1,6 +1,7 @@
 package com.example.filechooserxml2;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.stage.FileChooser;
@@ -21,6 +22,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 public class FileChooserController {
+
     @FXML
     private Label welcomeText;
     @FXML
@@ -32,15 +34,18 @@ public class FileChooserController {
     private String absolutePath;
     @FXML
     private File selectedFile;
+    @FXML
+    private String fileName;
 
     @FXML
     public void onHelloButtonClick() throws IOException {
+
         FileChooser fileChooser = new FileChooser();
         fileChooser.setInitialDirectory(new File("C:\\Users"));
         fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("XML Files", "*.xml"));
         selectedFile = fileChooser.showOpenDialog(mainStage);
         absolutePath = selectedFile.getAbsolutePath();
-        String fileName = selectedFile.getName();
+        fileName = selectedFile.getName();
 
         if (selectedFile != null) {
 
@@ -70,7 +75,7 @@ public class FileChooserController {
             Document doc = db.parse(new File(absolutePath));
 
 
-            doc.getDocumentElement().normalize();
+            //doc.getDocumentElement().normalize();
 
             System.out.println("Root Element :" + doc.getDocumentElement().getNodeName());
             System.out.println(doc.getDocumentElement().getTextContent());
